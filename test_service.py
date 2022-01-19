@@ -67,3 +67,6 @@ class TestParseLink:
 
     def test_parse_link_with_query_string(self):
         assert parse_link('https://ya.ru?q=123') == 'ya.ru'
+
+
+
