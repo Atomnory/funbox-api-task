@@ -1,0 +1,2 @@
+class ParseDomainException(Exception):
+    pass

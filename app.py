@@ -36,8 +36,8 @@ app = Flask(__name__)
 def post_visited_links():
     if not request.json:
         abort(400)
-    status = handle_links(request.json['links'], int(time.time()))  # turn to 'return response'
-    return jsonify({'status': status})
+    response = handle_links(request.json['links'], int(time.time()))
+    return jsonify(response)
 
 @app.route('/visited_domains', methods=['GET'])
 def get_visited_domains():

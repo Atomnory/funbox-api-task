@@ -1,22 +1,23 @@
 import pytest
-from app import parse_link
+from service import parse_link
+from exception import ParseDomainException
 
 
-class TestParseLink:
+class TestsParseLink:
     def test_parse_num(self):
-        with pytest.raises(Exception):
+        with pytest.raises(ParseDomainException):
             parse_link(16)
 
     def test_parse_string_with_dot(self):
-        with pytest.raises(Exception):
+        with pytest.raises(ParseDomainException):
             parse_link('I hope not. You might pull a muscle.')
 
     def test_parse_link_startswith_dot(self):
-        with pytest.raises(Exception):
+        with pytest.raises(ParseDomainException):
             parse_link('.pytest.org')
 
     def test_parse_link_endswith_dot(self):
-        with pytest.raises(Exception):
+        with pytest.raises(ParseDomainException):
             parse_link('docs.pytest.')
 
     def test_parse_full_link(self):
@@ -38,35 +39,40 @@ class TestParseLink:
         assert parse_link('https.upport') == 'https.upport'
 
     def test_parse_string(self):
-        with pytest.raises(Exception):
+        with pytest.raises(ParseDomainException):
             parse_link('She undid the string round the parcel')
 
     def test_parse_wrong_link(self):
-        with pytest.raises(Exception):
+        with pytest.raises(ParseDomainException):
             parse_link('http://habr/com/')
 
     def test_parse_slashes(self):
-        with pytest.raises(Exception):
+        with pytest.raises(ParseDomainException):
             parse_link('////')
 
     def test_parse_http_and_slashes(self):
-        with pytest.raises(Exception):
+        with pytest.raises(ParseDomainException):
             parse_link('http:///')
 
     def test_parse_https_slashes_and_dots(self):
-        with pytest.raises(Exception):
+        with pytest.raises(ParseDomainException):
             parse_link('https://../')
 
     def test_parse_extremly_short_wrong_link(self):
-        with pytest.raises(Exception):
+        with pytest.raises(ParseDomainException):
             parse_link('https://a/u.ru/')
         
     def test_parse_dobule_protocol_link(self):
-        with pytest.raises(Exception):
+        with pytest.raises(ParseDomainException):
             parse_link('https://https://docs.pytest')
 
     def test_parse_link_with_query_string(self):
         assert parse_link('https://ya.ru?q=123') == 'ya.ru'
 
+    def test_parse_link_with_only_dot(self):
+        with pytest.raises(ParseDomainException):
+            parse_link('.')
 
-
+    def test_parse_link_with_one_letter(self):
+        with pytest.raises(ParseDomainException):
+            parse_link('a')
